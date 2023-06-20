@@ -49,7 +49,7 @@ const Banner = () => {
             alt='apple5'
           />
         </div>
-        <div className='text-white absolute w-fit left-0 right-[150px] mx-auto flex gap-8 bottom-4'>
+        <div className='text-white absolute w-fit left-0 right-0 mx-auto flex gap-8 bottom-4'>
           <div
             onClick={prevSlide}
             className='w-14 h-12 border-[1px] border-white flex items-center justify-center

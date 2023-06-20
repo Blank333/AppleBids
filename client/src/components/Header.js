@@ -5,7 +5,7 @@ import { logoDark } from "../assets/index";
 
 const Header = () => {
   return (
-    <div className='flex justify-between border-b-2 border-b-gray-400 h-12 mb-2'>
+    <div className='container m-auto p-3 rounded-b-lg flex justify-between border-b-2 border-b-gray-400 bg-white mb-2 sticky top-0 z-50'>
       <div>
         <img className='w-36' src={logoDark} alt='logo' />
       </div>
