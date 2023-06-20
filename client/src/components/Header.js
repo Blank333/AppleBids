@@ -4,7 +4,6 @@ import { PersonOutline, ShoppingBagOutlined } from "@mui/icons-material";
 import { logoDark } from "../assets/index";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-
 const Header = () => {
   const productData = useSelector((state) => state.applebids.productData);
   return (
@@ -15,10 +14,12 @@ const Header = () => {
         </Link>
       </div>
       <div>
-        <IconButton sx={{ color: "black" }}>
-          {productData.length}
-          <ShoppingBagOutlined />
-        </IconButton>
+        <Link to='/cart'>
+          <IconButton sx={{ color: "black" }}>
+            {productData.length}
+            <ShoppingBagOutlined />
+          </IconButton>
+        </Link>
 
         <IconButton sx={{ color: "black" }}>
           <PersonOutline />

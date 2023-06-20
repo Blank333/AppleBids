@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { addToCart } from "../redux/appleSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 const Product = () => {
   const dispatch = useDispatch();
@@ -86,6 +87,9 @@ const Product = () => {
                     quantity: baseQty,
                     description: details.description,
                   })
+                ) &
+                toast.error(
+                  `${baseQty} ${details.title} has been added to cart`
                 )
               }
               className='bg-black text-white py-3 px-6 active:bg-gray-800 flex gap-2'
@@ -100,6 +104,18 @@ const Product = () => {
           </p>
         </div>
       </div>
+      <ToastContainer
+        position='top-left'
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='colored'
+      />
     </div>
   );
 };
