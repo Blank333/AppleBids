@@ -1,11 +1,31 @@
 import React from "react";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { ArrowForward } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/appleSlice";
+
 const ProductsCard = ({ product }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const _id = product.title;
+  const idString = (_id) => {
+    return String(_id).toLowerCase().split(" ").join("");
+  };
+  const rootId = idString(_id);
+  const handleDetails = () => {
+    navigate(`/product/${rootId}`, {
+      state: {
+        item: product,
+      },
+    });
+  };
   return (
     <div className='group relative'>
-      <div className='w-full h-96 cursor-pointer overflow-hidden'>
+      <div
+        onClick={handleDetails}
+        className='w-full h-96 cursor-pointer overflow-hidden'
+      >
         <img
           className='w-full h-full object-cover group-hover:scale-110 duration-500'
           src={product.image}
@@ -26,7 +46,21 @@ const ProductsCard = ({ product }) => {
               </p>
               <p className='font-semibold'>₹{product.price}/box</p>
             </div>
-            <p className='absolute z-20 w-32 text-gray-500 hover:text-gray-900 flex items-center gap-1 top-0 transform -translate-x-32 group-hover:translate-x-0 transition-transform cursor-pointer duration-500'>
+            <p
+              onClick={() =>
+                dispatch(
+                  addToCart({
+                    _id: product._id,
+                    title: product.title,
+                    image: product.image,
+                    price: product.price,
+                    quantity: 1,
+                    description: product.description,
+                  })
+                )
+              }
+              className='absolute z-20 w-32 text-gray-500 hover:text-gray-900 flex items-center gap-1 top-0 transform -translate-x-32 group-hover:translate-x-0 transition-transform cursor-pointer duration-500'
+            >
               Add to cart
               <span>
                 <ShoppingBagIcon />
@@ -39,8 +73,8 @@ const ProductsCard = ({ product }) => {
         </div>
         <div className='absolute top-4 right-0'>
           {product.isNew ? (
-            <p className='bg-black text-white font-semibold font-titleFont px-6 py-1'>
-              Sale
+            <p className='bg-green-500 text-white font-semibold font-titleFont px-6 py-1'>
+              For Sale
             </p>
           ) : (
             <p className='bg-red-500 text-white font-semibold font-titleFont px-6 py-1'>
