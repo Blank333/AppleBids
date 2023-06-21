@@ -21,9 +21,11 @@ const Header = () => {
           </IconButton>
         </Link>
 
-        <IconButton sx={{ color: "black" }}>
-          <PersonOutline />
-        </IconButton>
+        <Link to='/login'>
+          <IconButton sx={{ color: "black" }}>
+            <PersonOutline />
+          </IconButton>
+        </Link>
       </div>
     </div>
   );

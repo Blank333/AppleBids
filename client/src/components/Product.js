@@ -88,7 +88,7 @@ const Product = () => {
                     description: details.description,
                   })
                 ) &
-                toast.error(
+                toast.success(
                   `${baseQty} ${details.title} has been added to cart`
                 )
               }
