@@ -1,5 +1,6 @@
 import React from "react";
 import { logoLight } from "../assets";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -18,9 +19,9 @@ const Footer = () => {
         <div>
           <h2 className='text-2xl font-semibold'>Contact Us</h2>
           <div>
-            <p>Address</p>
-            <p>Mobile Phone</p>
-            <p>Office Phone</p>
+            <p>Bahra University, Shimla Hills, Solan</p>
+            <p>9876543210</p>
+            <p>1800-456-321</p>
             <p>E-mail: ceelxx@gmail.com</p>
           </div>
         </div>
@@ -28,14 +29,19 @@ const Footer = () => {
 
         <div>
           <h2 className='text-2xl font-semibold'>Profile</h2>
-          <p>
-            <span></span>
-            Account
-          </p>
-          <p>
-            <span></span>
-            Checkout
-          </p>
+
+          <Link to='/login'>
+            <p>
+              <span></span>
+              Account
+            </p>
+          </Link>
+          <Link to='/cart'>
+            <p>
+              <span></span>
+              Checkout
+            </p>
+          </Link>
           <p>
             <span></span>
             Tracking

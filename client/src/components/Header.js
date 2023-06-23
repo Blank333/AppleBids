@@ -1,6 +1,13 @@
 import React from "react";
-import { IconButton } from "@mui/material";
-import { PersonOutline, ShoppingBagOutlined } from "@mui/icons-material";
+import { Icon, IconButton } from "@mui/material";
+import {
+  Add,
+  AddAPhoto,
+  AddBox,
+  PersonOutline,
+  ShoppingBagOutlined,
+  Upload,
+} from "@mui/icons-material";
 import { logoDark } from "../assets/index";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -41,6 +48,13 @@ const Header = () => {
             </IconButton>
           )}
         </Link>
+        {userInfo && (
+          <Link className='flex' to='/addproduct'>
+            <IconButton sx={{ color: "black" }}>
+              <AddBox />
+            </IconButton>
+          </Link>
+        )}
       </div>
     </div>
   );

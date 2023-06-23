@@ -58,18 +58,27 @@ const Product = () => {
           </div>
           <p className='text-base text-gray-600 -mt-3'>{details.description}</p>
           <div className='flex gap-4'>
-            <div className='w-52 flex items-center justify-between text-gray-500 gap-4 border p-3'>
+            <div className='w-60 flex items-center justify-between text-gray-500 gap-4 border p-3'>
               <p className='text-sm'>Quantity</p>
               <div className='flex items-center gap-4 text-sm font-semibold'>
                 <button
-                  onClick={() => (baseQty > 1 ? setBaseQty(baseQty - 1) : 0)}
+                  onClick={() =>
+                    baseQty > 1 ? setBaseQty(Number(baseQty) - 1) : 0
+                  }
                   className='border h-5 font-normal text-lg flex items-center justify-center px-2 hover:bg-gray-700 hover:text-white cursor-pointer duration-300 active:bg-black'
                 >
                   -
                 </button>
-                <span>{baseQty}</span>
+                <input
+                  type='text'
+                  className='w-10 text-center'
+                  placeholder={baseQty}
+                  value={baseQty}
+                  onChange={(e) => setBaseQty(e.target.value)}
+                />
+
                 <button
-                  onClick={() => setBaseQty(baseQty + 1)}
+                  onClick={() => setBaseQty(Number(baseQty) + 1)}
                   className='border h-5 font-normal text-lg flex items-center justify-center px-2 hover:bg-gray-700 hover:text-white cursor-pointer duration-300 active:bg-black'
                 >
                   +

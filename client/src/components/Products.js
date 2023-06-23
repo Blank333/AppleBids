@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductsCard from "./ProductsCard";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase.config";
 
-const Products = ({ products }) => {
+const Products = () => {
+  const [products, setProducts] = useState([]);
+
+  const fetchPost = async () => {
+    await getDocs(collection(db, "products")).then((querySnapshot) => {
+      const newData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setProducts(newData);
+      console.log(products, newData);
+    });
+  };
+
+  useEffect(() => {
+    fetchPost();
+  }, []);
+
+  console.log(products);
   return (
     <div className='py-10'>
       <div className='flex flex-col items-center gap-4 '>
@@ -23,7 +43,7 @@ const Products = ({ products }) => {
       </div>
       <div className='max-w-screen-xl mx-auto grid grid-cols-4 gap-4'>
         {products.map((item) => (
-          <ProductsCard key={item._id} product={item} />
+          <ProductsCard key={item.id} product={item} />
         ))}
       </div>
     </div>
