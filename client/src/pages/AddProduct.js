@@ -3,31 +3,51 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const AddProduct = () => {
+  const userInfo = useSelector((state) => state.applebids.userInfo);
   const navigate = useNavigate();
   const [formData, setformData] = useState({
     title: "",
     description: "",
+    farm: "",
     price: 0,
+    boxes: 0,
     category: "",
+    DoH: "",
     isNew: false,
     oldPrice: 0,
+    uploadedBy: "",
   });
 
   const addProd = async (e) => {
     e.preventDefault();
-
+    if (
+      !document.forms["addProd"]["title"].value ||
+      !document.forms["addProd"]["description"].value ||
+      !document.forms["addProd"]["farm"].value ||
+      !document.forms["addProd"]["price"].value ||
+      !document.forms["addProd"]["category"].value ||
+      !document.forms["addProd"]["DoH"].value
+    ) {
+      toast.error("Please fill out the required fields!");
+      return false;
+    }
     try {
       const docRef = await addDoc(
         collection(db, "products"),
         {
           title: formData.title,
           description: formData.description,
+          farm: formData.farm,
           price: formData.price,
+          boxes: formData.boxes,
           category: formData.category,
+          DoH: formData.DoH,
           isNew: formData.isNew,
           oldPrice: formData.oldPrice,
+          uploadedBy: userInfo.name,
         },
         { merge: false }
       );
@@ -48,19 +68,45 @@ const AddProduct = () => {
   return (
     <div className='flex items-center justify-center p-12'>
       <div className='mx-auto w-full max-w-[550px]'>
-        <form action='/AddProduct' method='POST'>
+        <form action='/AddProduct' method='POST' name='addProd'>
           <div className='-mx-3 flex flex-wrap'>
             <div className='w-full px-3 sm:w-1/2'>
-              <div className='mb-5'>
-                <label
-                  for='title'
-                  className='mb-3 block text-base font-medium text-[#07074D]'
-                >
-                  Variety
-                </label>
+              <div className='mb-2'>
+                <div className='flex'>
+                  <label
+                    htmlFor='farm'
+                    className='mb-2 block text-base font-medium text-[#07074D]'
+                  >
+                    Name of Farm
+                  </label>
+                  <span className='text-red-500 '>*</span>
+                </div>
                 <input
                   type='text'
-                  value={formData.title}
+                  required
+                  onChange={handleChange}
+                  name='farm'
+                  id='farm'
+                  placeholder='Name of Farm'
+                  className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+                />
+              </div>
+            </div>
+
+            <div className='w-full px-3 sm:w-1/2'>
+              <div className='mb-2'>
+                <div className='flex'>
+                  <label
+                    htmlFor='title'
+                    className='mb-2 block text-base font-medium text-[#07074D]'
+                  >
+                    Variety
+                  </label>
+                  <span className='text-red-500 '>*</span>
+                </div>
+                <input
+                  type='text'
+                  required
                   onChange={handleChange}
                   name='title'
                   id='title'
@@ -69,152 +115,217 @@ const AddProduct = () => {
                 />
               </div>
             </div>
+          </div>
+
+          <div className='-mx-3 flex flex-wrap'>
             <div className='w-full px-3 sm:w-1/2'>
-              <div className='mb-5'>
-                <label
-                  for='price'
-                  className='mb-3 block text-base font-medium text-[#07074D]'
-                >
-                  Price per box
-                </label>
+              <div className='mb-2'>
+                <div className='flex'>
+                  <label
+                    htmlFor='boxes'
+                    className='mb-2 block text-base font-medium text-[#07074D]'
+                  >
+                    Boxes Available
+                  </label>
+                  <span className='text-red-500 '>*</span>
+                </div>
+                <input
+                  type='number'
+                  name='boxes'
+                  id='boxes'
+                  required
+                  placeholder='Boxes'
+                  onChange={handleChange}
+                  className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+                />
+              </div>
+            </div>
+
+            <div className='w-full px-3 sm:w-1/2'>
+              <div className='mb-2'>
+                <div className='flex'>
+                  <label
+                    htmlFor='price'
+                    className='mb-2 block text-base font-medium text-[#07074D]'
+                  >
+                    Price per box
+                  </label>
+                  <span className='text-red-500 '>*</span>
+                </div>
+
                 <input
                   type='number'
                   name='price'
                   id='price'
+                  required
                   placeholder='Price'
-                  value={formData.price}
                   onChange={handleChange}
                   className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
                 />
               </div>
             </div>
           </div>
-          <div className='mb-5'>
-            <label
-              for='description'
-              className='mb-3 block text-base font-medium text-[#07074D]'
-            >
-              Description
-            </label>
+
+          <div className='mb-2'>
+            <div className='flex'>
+              <label
+                htmlFor='description'
+                className='mb-2 block text-base font-medium text-[#07074D]'
+              >
+                Description
+              </label>
+              <span className='text-red-500 '>*</span>
+            </div>
             <textarea
               rows='5'
               name='description'
               id='description'
+              required
               placeholder='Description'
               value={formData.description}
               onChange={handleChange}
               className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
             />
           </div>
-          <div className='mb-5'>
-            <label
-              for='category'
-              className='mb-3 block text-base font-medium text-[#07074D]'
-            >
-              Category
-            </label>
-            <select
-              rows='5'
-              name='category'
-              id='category'
-              value={formData.category}
-              onChange={handleChange}
-              className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-            >
-              <option value='Royal'>Royal</option>
-              <option value='Golden'>Golden</option>
-              <option value='Crisp'>Crisp</option>
-              <option value='Tangy'>Tangy</option>
-            </select>
-          </div>
 
-          {/* <div class='mb-5'>
-            <label
-              for='guest'
-              class='mb-3 block text-base font-medium text-[#07074D]'
-            >
-              How many guest are you bringing?
-            </label>
-            <input
-              type='number'
-              name='guest'
-              id='guest'
-              placeholder='5'
-              min='0'
-              class='w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-            />
-          </div>
-
-          <div class='-mx-3 flex flex-wrap'>
-            <div class='w-full px-3 sm:w-1/2'>
-              <div class='mb-5'>
-                <label
-                  for='date'
-                  class='mb-3 block text-base font-medium text-[#07074D]'
-                >
-                  Date
-                </label>
+          <div className='-mx-3 flex flex-wrap'>
+            <div className='w-full px-3 sm:w-1/2'>
+              <div className='mb-2'>
+                <div className='flex'>
+                  <label
+                    htmlFor='DoH'
+                    className='mb-2 block text-base font-medium text-[#07074D]'
+                  >
+                    Date of harvest
+                  </label>
+                  <span className='text-red-500 '>*</span>
+                </div>
                 <input
                   type='date'
-                  name='date'
-                  id='date'
-                  class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+                  name='DoH'
+                  id='DoH'
+                  required
+                  placeholder=''
+                  onChange={handleChange}
+                  className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
                 />
               </div>
             </div>
-            <div class='w-full px-3 sm:w-1/2'>
-              <div class='mb-5'>
+
+            <div className='w-full px-3 sm:w-1/2 '>
+              <div className='flex'>
+                {" "}
                 <label
-                  for='time'
-                  class='mb-3 block text-base font-medium text-[#07074D]'
+                  htmlFor='category'
+                  className='mb-2 block text-base font-medium text-[#07074D]'
                 >
-                  Time
+                  Category
                 </label>
-                <input
-                  type='time'
-                  name='time'
-                  id='time'
-                  class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-                />
+                <span className='text-red-500 '>*</span>
               </div>
+              <select
+                rows='5'
+                name='category'
+                id='category'
+                required
+                value={formData.category}
+                onChange={handleChange}
+                className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+              >
+                <option value=''>--Please Select a Category</option>
+                <option value='Royal'>Royal</option>
+                <option value='Golden'>Golden</option>
+                <option value='Crisp'>Crisp</option>
+                <option value='Tangy'>Tangy</option>
+              </select>
             </div>
           </div>
 
-          <div class='mb-5'>
-            <label class='mb-3 block text-base font-medium text-[#07074D]'>
-              Are you coming to the event?
-            </label>
-            <div class='flex items-center space-x-6'>
-              <div class='flex items-center'>
-                <input
-                  type='radio'
-                  name='radio1'
-                  id='radioButton1'
-                  class='h-5 w-5'
-                />
-                <label
-                  for='radioButton1'
-                  class='pl-3 text-base font-medium text-[#07074D]'
-                >
-                  Yes
-                </label>
-              </div>
-              <div class='flex items-center'>
-                <input
-                  type='radio'
-                  name='radio1'
-                  id='radioButton2'
-                  class='h-5 w-5'
-                />
-                <label
-                  for='radioButton2'
-                  class='pl-3 text-base font-medium text-[#07074D]'
-                >
-                  No
-                </label>
+          <div className='-mx-3 flex flex-wrap'>
+            <div className='w-full px-3 sm:w-1/2'>
+              <div className='mb-2'>
+                <div className='flex'>
+                  <label
+                    htmlFor='DoH'
+                    className='mb-2 block text-base font-medium text-[#07074D]'
+                  >
+                    Sale?
+                  </label>
+                </div>
+                <div className='flex justify-between px-8 items-center'>
+                  <div className='flex'>
+                    <input
+                      type='radio'
+                      name='isNew'
+                      id='isNew'
+                      placeholder=''
+                      onChange={handleChange}
+                      className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+                    />
+                    <label
+                      for='isNew'
+                      class='pl-3 text-base font-medium text-[#07074D]'
+                    >
+                      Yes
+                    </label>
+                  </div>
+
+                  <div className='flex'>
+                    <input
+                      type='radio'
+                      name='isNew'
+                      id='isNew'
+                      required
+                      placeholder=''
+                      onChange={handleChange}
+                      className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+                    />
+                    <label
+                      for='isNew'
+                      class='pl-3 text-base font-medium text-[#07074D]'
+                    >
+                      No
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
-          </div> */}
+
+            <div className='w-full px-3 sm:w-1/2 '>
+              <div className='flex'>
+                {" "}
+                <label
+                  htmlFor='oldPrice'
+                  className='mb-2 block text-base font-medium text-[#07074D]'
+                >
+                  Old Price
+                </label>
+              </div>
+              <input
+                type='number'
+                name='oldPrice'
+                id='oldPrice'
+                placeholder='Old Price'
+                onChange={handleChange}
+                className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+              />
+            </div>
+          </div>
+
+          <div className='mb-3 flex flex-wrap'>
+            <label
+              className='mb-2 block text-base font-medium text-[#07074D]'
+              htmlFor='image'
+            >
+              Upload image
+            </label>
+            <input
+              className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+              id='image'
+              type='file'
+              accept='image/png, image/gif, image/jpeg'
+            ></input>
+          </div>
 
           <div>
             <button

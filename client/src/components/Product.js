@@ -32,12 +32,28 @@ const Product = () => {
           </div>
         </div>
         <div className='w-3/5 flex flex-col justify-center gap-12'>
-          <div>
-            <h2 className='text-4xl font-semibold'>{details.title}</h2>
-
-            <div className='flex items-center gap-4 mt-3'>
+          <h2 className='text-4xl font-semibold'>{details.title}</h2>
+          <div className='flex items-center justify-between'>
+            <div>
+              <h2 className='text-gray-800 mt-1 font-titleFont'>
+                Farm: {details.farm}
+              </h2>
+              <h2 className='text-gray-400 mt-1 font-titleFont'>
+                by: {details.uploadedBy}
+              </h2>
+            </div>
+            <div>
+              {details.boxes ? (
+                <p className='mt-1 text-gray-800'>
+                  <span>{details.boxes} boxes available</span>
+                </p>
+              ) : (
+                <p className='bg-red-500 p-2 text-white text-center'>
+                  Sold out!
+                </p>
+              )}
               {details.isNew && (
-                <p className='line-through font-base text-gray-500'>
+                <p className='line-through mt-1   font-base text-gray-500'>
                   ₹{details.oldPrice}/box
                 </p>
               )}
@@ -84,6 +100,7 @@ const Product = () => {
                 </button>
               </div>
             </div>
+
             <button
               onClick={() =>
                 dispatch(
@@ -106,10 +123,20 @@ const Product = () => {
               <ShoppingBagIcon />
             </button>
           </div>
-          <p className='text-base text-gray-500'>
-            Category:{" "}
-            <span className='font-medium capitalize'>{details.category}</span>
-          </p>
+          <div className='flex justify-between'>
+            <p className='text-base text-gray-500'>
+              Category:{" "}
+              <span className='font-medium capitalize text-gray-600'>
+                {details.category}
+              </span>
+            </p>
+            <p className='text-gray-500 text-base'>
+              Date of Harvest:{" "}
+              <span className='font-medium capitalize text-gray-600'>
+                {details.DoH}
+              </span>
+            </p>
+          </div>
         </div>
       </div>
       <ToastContainer
