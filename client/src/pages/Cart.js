@@ -52,20 +52,9 @@ const Cart = () => {
           >
             Proceed to Checkout
           </button>
-          {/* {payNow && (
-              <div className='w-full mt-6 flex items-center justify-center'>
-                <StripeCheckout
-                  stripeKey='pk_test_51NChPBSAJxsan0ESihHuZDNgCjNR9GP1DEudWm2BI9FKImRXz29FKr9CFEqA04tM9E21so3uaXajvIpWxbY4v8eJ00hPdrbje5'
-                  name='Online Apple Mandi'
-                  amount={totalAmt * 100}
-                  label='Pay to Online Apple Mandi'
-                  description={`Your payment amount is ${totalAmt}`}
-                  token={payment}
-                  email={userInfo.email}
-                />
-              </div>
-            )} */}
-          {payNow && <Checkout totalAmt={totalAmt} />}
+          <div className='flex justify-center'>
+            {payNow && <Checkout totalAmt={totalAmt} />}
+          </div>
         </div>
       </div>
       <ToastContainer
