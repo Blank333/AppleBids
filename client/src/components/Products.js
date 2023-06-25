@@ -5,7 +5,39 @@ import { db } from "../firebase.config";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [sortingOption, setSortingOption] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
+  const handleSortByPrice = () => {
+    setSortingOption("price");
+  };
+
+  const handleSortByCategory = () => {
+    setSortingOption("category");
+  };
+
+  const handleSortByName = () => {
+    setSortingOption("name");
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortingOption === "price") {
+      return a.price - b.price;
+    } else if (sortingOption === "category") {
+      return a.category.localeCompare(b.category);
+    } else if (sortingOption === "name") {
+      return a.title.localeCompare(b.title);
+    }
+    return 0;
+  });
+
+  const filteredProducts = products.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const fetchPost = async () => {
     await getDocs(collection(db, "products")).then((querySnapshot) => {
       const newData = querySnapshot.docs.map((doc) => ({
@@ -40,11 +72,53 @@ const Products = () => {
         </p>
         <span className='w-[80vw] h-[2px] bg-gray-300 mb-8'></span>
       </div>
-      <div className='max-w-screen-xl mx-auto grid grid-cols-4 gap-4'>
-        {products.map((item) => (
-          <ProductsCard key={item.id} product={item} />
-        ))}
+      <div className='flex space-x-4 justify-start max-w-screen-xl mx-auto mb-4'>
+        <button
+          className='px-4 py-2 text-white bg-red-500 hover:bg-red-600 duration-300 rounded-md'
+          onClick={handleSortByPrice}
+        >
+          Sort by Price
+        </button>
+        <button
+          className='px-4 py-2 text-white bg-red-500 hover:bg-red-600 duration-300 rounded-md'
+          onClick={handleSortByCategory}
+        >
+          Sort by Category
+        </button>
+        <button
+          className='px-4 py-2 text-white bg-red-500 hover:bg-red-600 duration-300 rounded-md'
+          onClick={handleSortByName}
+        >
+          Sort by Name
+        </button>
+        <div className='flex-grow'>
+          <input
+            type='text'
+            placeholder='Search products...'
+            value={searchTerm}
+            onChange={handleSearch}
+            className='px-4 py-2 border border-red-300 rounded-md w-full'
+          />
+        </div>
       </div>
+
+      {searchTerm ? (
+        <div className='max-w-screen-xl mx-auto grid grid-cols-4 gap-4'>
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((item) => (
+              <ProductsCard key={item.id} product={item} />
+            ))
+          ) : (
+            <p>No matching products found.</p>
+          )}
+        </div>
+      ) : (
+        <div className='max-w-screen-xl mx-auto grid grid-cols-4 gap-4'>
+          {sortedProducts.map((item) => (
+            <ProductsCard key={item.id} product={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
