@@ -1,4 +1,3 @@
-```
 # Online Apple Mandi
 
 ## Table of Contents
@@ -75,6 +74,4 @@ The Online Apple Mandi project utilizes the following technologies:
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-```
 
-Feel free to customize the content according to your specific project details.
