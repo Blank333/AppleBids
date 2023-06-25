@@ -12,6 +12,8 @@ import {
   RouterProvider,
   ScrollRestoration,
 } from "react-router-dom";
+import Success from "./pages/Success";
+import Fail from "./pages/Fail";
 
 const Layout = () => {
   return (
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
       {
         path: "/addproduct",
         element: <AddProduct />,
+      },
+      {
+        path: "/success",
+        element: <Success />,
+      },
+      {
+        path: "/fail",
+        element: <Fail />,
       },
     ],
   },

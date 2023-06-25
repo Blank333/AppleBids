@@ -23,7 +23,8 @@ app.post("/pay", async (req, res) => {
   const session = await Stripe.checkout.sessions.create({
     billing_address_collection: "required",
     line_items: req.body.products,
-    success_url: "http://localhost:3000/",
+    success_url: "http://localhost:3000/success",
+    cancel_url: "http://localhost:3000/fail",
     mode: "payment",
   });
   res.redirect(200, session.url);
