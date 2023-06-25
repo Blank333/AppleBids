@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import { apple5 } from "../assets";
 import CartItem from "../components/CartItem";
 import { ToastContainer, toast } from "react-toastify";
-import StripeCheckout from "react-stripe-checkout";
-import axios from "axios";
+import Checkout from "../components/Checkout";
 
 const Cart = () => {
   const productData = useSelector((state) => state.applebids.productData);
@@ -29,12 +28,6 @@ const Cart = () => {
     }
   };
 
-  const payment = async (token) => {
-    await axios.post("http://localhost:8000/pay", {
-      amount: totalAmt * 100,
-      token: token,
-    });
-  };
   return (
     <div>
       <img className='w-full h-60 object-cover' src={apple5} alt='cart' />
@@ -49,10 +42,6 @@ const Cart = () => {
                 ₹{totalAmt}
               </span>
             </p>
-            <p className='flex items-start gap-4 text-base'>
-              Shipping{" "}
-              <span className='font-titleFont font-bold text-lg'>₹90</span>
-            </p>
           </div>
           <p className='font-titleFont font-semibold flex justify-between mt-6'>
             Total <span className='text-xl font-bold'>₹{totalAmt}</span>
@@ -63,19 +52,20 @@ const Cart = () => {
           >
             Proceed to Checkout
           </button>
-          {payNow && (
-            <div className='w-full mt-6 flex items-center justify-center'>
-              <StripeCheckout
-                stripeKey='pk_test_51NChPBSAJxsan0ESihHuZDNgCjNR9GP1DEudWm2BI9FKImRXz29FKr9CFEqA04tM9E21so3uaXajvIpWxbY4v8eJ00hPdrbje5'
-                name='Online Mandi'
-                amount={totalAmt * 100}
-                label='Pay to Online Mandi'
-                description={`Your payment amount is ${totalAmt}`}
-                token={payment}
-                email={userInfo.email}
-              />
-            </div>
-          )}
+          {/* {payNow && (
+              <div className='w-full mt-6 flex items-center justify-center'>
+                <StripeCheckout
+                  stripeKey='pk_test_51NChPBSAJxsan0ESihHuZDNgCjNR9GP1DEudWm2BI9FKImRXz29FKr9CFEqA04tM9E21so3uaXajvIpWxbY4v8eJ00hPdrbje5'
+                  name='Online Apple Mandi'
+                  amount={totalAmt * 100}
+                  label='Pay to Online Apple Mandi'
+                  description={`Your payment amount is ${totalAmt}`}
+                  token={payment}
+                  email={userInfo.email}
+                />
+              </div>
+            )} */}
+          {payNow && <Checkout totalAmt={totalAmt} />}
         </div>
       </div>
       <ToastContainer

@@ -56,7 +56,11 @@ const Login = () => {
           onClick={handleGoogleLogin}
           className='text-base w-80 h-12 tracking-wide border-[1px] border-gray-400 rounded-md flex items-center justify-center gap-2 hover:border-blue-600 cursor-pointer duration-300'
         >
-          <img className='w-8' src='' alt='' />
+          <img
+            className='w-8'
+            src='https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA'
+            alt=''
+          />
           <span className='text-sm text-gray-900'>
             Sign in with Google Account
           </span>

@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
+  const navigate = useNavigate();
   const [formData, setformData] = useState({
     title: "",
     description: "",
     price: 0,
     category: "",
-    isNew: true,
+    isNew: false,
     oldPrice: 0,
   });
 
@@ -29,6 +31,9 @@ const AddProduct = () => {
         },
         { merge: false }
       );
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
       toast.success(`You have added ${formData.title} to the Mandi`);
     } catch (e) {
       console.error("Error adding document: ", e);

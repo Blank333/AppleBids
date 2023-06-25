@@ -42,16 +42,19 @@ const ProductsCard = ({ product }) => {
           </div>
           <div className='flex justify-end gap-2 relative overflow-hidden w-36 text-sm'>
             <div className='flex gap-2 transform group-hover:translate-x-40 transition-transform duration-500'>
-              <p className='line-through text-gray-500'>
-                ₹{product.oldPrice}/box
-              </p>
+              {product.isNew && (
+                <p className='line-through text-gray-500'>
+                  ₹{product.oldPrice}/box
+                </p>
+              )}
+
               <p className='font-semibold'>₹{product.price}/box</p>
             </div>
             <p
               onClick={() =>
                 dispatch(
                   addToCart({
-                    _id: product._id,
+                    _id: product.id,
                     title: product.title,
                     image: product.image,
                     price: product.price,
@@ -73,13 +76,9 @@ const ProductsCard = ({ product }) => {
           <p>{product.category}</p>
         </div>
         <div className='absolute top-4 right-0'>
-          {product.isNew ? (
+          {product.isNew && (
             <p className='bg-green-500 text-white font-semibold font-titleFont px-6 py-1'>
               For Sale
-            </p>
-          ) : (
-            <p className='bg-red-500 text-white font-semibold font-titleFont px-6 py-1'>
-              Out of Stock
             </p>
           )}
         </div>

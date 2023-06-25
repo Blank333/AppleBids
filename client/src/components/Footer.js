@@ -8,7 +8,7 @@ const Footer = () => {
       <div className='max-w-full mx-auto grid grid-cols-4'>
         {/* -------LOGO-------- */}
         <div className='flex flex-col gap-7'>
-          <img className='w-28' src={logoLight} alt='' />
+          <img className='w-44' src={logoLight} alt='' />
           <p className='text-sm tracking-wide'>(c) Pear Blossom Farms</p>
           <div className='flex gap-5 text-lg'>
             Social Media Social Media Social Media

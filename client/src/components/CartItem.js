@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 const CartItem = () => {
   const productData = useSelector((state) => state.applebids.productData);
   const dispatch = useDispatch();
+  console.log(productData);
   return (
     <div className='w-2/3 pr-10'>
       <div className='w-full'>

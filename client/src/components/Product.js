@@ -24,13 +24,9 @@ const Product = () => {
             alt='productImage'
           />
           <div className='absolute top-4 right-0'>
-            {details.isNew ? (
+            {details.isNew && (
               <p className='bg-green-500 text-white font-semibold font-titleFont px-6 py-1'>
                 For Sale
-              </p>
-            ) : (
-              <p className='bg-red-500 text-white font-semibold font-titleFont px-6 py-1'>
-                Out of Stock
               </p>
             )}
           </div>
@@ -40,9 +36,12 @@ const Product = () => {
             <h2 className='text-4xl font-semibold'>{details.title}</h2>
 
             <div className='flex items-center gap-4 mt-3'>
-              <p className='line-through font-base text-gray-500'>
-                ₹{details.oldPrice}/box
-              </p>
+              {details.isNew && (
+                <p className='line-through font-base text-gray-500'>
+                  ₹{details.oldPrice}/box
+                </p>
+              )}
+
               <p className='font-medium text-2xl'>₹{details.price}/box</p>
             </div>
           </div>
@@ -89,7 +88,7 @@ const Product = () => {
               onClick={() =>
                 dispatch(
                   addToCart({
-                    _id: details._id,
+                    _id: details.id,
                     title: details.title,
                     image: details.image,
                     price: details.price,
