@@ -4,10 +4,15 @@ import { db } from "../firebase.config";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { storage } from "../firebase.config";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 const AddProduct = () => {
   const userInfo = useSelector((state) => state.applebids.userInfo);
   const navigate = useNavigate();
+  const [imgUrl, setImgUrl] = useState(null);
+  const [progresspercent, setProgresspercent] = useState(0);
+
   const [formData, setformData] = useState({
     title: "",
     description: "",
@@ -19,7 +24,36 @@ const AddProduct = () => {
     isNew: false,
     oldPrice: 0,
     uploadedBy: "",
+    image: "",
   });
+
+  const handleUpload = (e) => {
+    e.preventDefault();
+    const file = e.target[0]?.files[0];
+
+    if (!file) return;
+
+    const storageRef = ref(storage, `products/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImgUrl(downloadURL);
+        });
+      }
+    );
+  };
 
   const addProd = async (e) => {
     e.preventDefault();
@@ -48,6 +82,7 @@ const AddProduct = () => {
           isNew: formData.isNew,
           oldPrice: formData.oldPrice,
           uploadedBy: userInfo.name,
+          image: imgUrl,
         },
         { merge: false }
       );
@@ -68,6 +103,44 @@ const AddProduct = () => {
   return (
     <div className='flex items-center justify-center p-12'>
       <div className='mx-auto w-full max-w-[550px]'>
+        <div className='mb-3 flex flex-wrap '>
+          {imgUrl && <p>File Uploaded</p>}
+          <form
+            onSubmit={handleUpload}
+            className='flex justify-between gap-14 items-end'
+          >
+            <div className='w-96'>
+              <label
+                className='mb-2 block text-base font-medium text-[#07074D]'
+                htmlFor='image'
+              >
+                Upload image{" "}
+                <span>
+                  {!imgUrl && (
+                    <div className='outerbar'>
+                      <div
+                        className='innerbar'
+                        style={{ width: `${progresspercent}%` }}
+                      >
+                        {progresspercent}%
+                      </div>
+                    </div>
+                  )}
+                </span>
+              </label>
+              <input
+                className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+                id='image'
+                type='file'
+                accept='image/png, image/gif, image/jpeg'
+              ></input>
+            </div>
+            <button className='w-28 bg-blue-200 rounded-lg h-12 ' type='submit'>
+              Upload
+            </button>
+          </form>
+        </div>
+
         <form action='/AddProduct' method='POST' name='addProd'>
           <div className='-mx-3 flex flex-wrap'>
             <div className='w-full px-3 sm:w-1/2'>
@@ -310,21 +383,6 @@ const AddProduct = () => {
                 className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
               />
             </div>
-          </div>
-
-          <div className='mb-3 flex flex-wrap'>
-            <label
-              className='mb-2 block text-base font-medium text-[#07074D]'
-              htmlFor='image'
-            >
-              Upload image
-            </label>
-            <input
-              className='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-              id='image'
-              type='file'
-              accept='image/png, image/gif, image/jpeg'
-            ></input>
           </div>
 
           <div>
